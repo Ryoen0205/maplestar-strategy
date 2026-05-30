@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>怪物百科 - 楓之谷</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&display=swap');
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: 'Noto Sans TC', sans-serif; }
+
+.ms-wrap {
+  background: linear-gradient(180deg, #a8d8f0 0%, #c5e8f7 30%, #d4f0c8 60%, #8bc34a 75%, #6d9e2e 80%, #795548 85%, #8d6e63 100%);
+  min-height: 100vh;
+  padding: 12px;
+  position: relative;
+  overflow: hidden;
+}
+
+.panel {
+  background: rgba(240, 220, 160, 0.95);
+  border: 3px solid #8B6914;
+  border-radius: 4px;
+  position: relative;
+  max-width: 700px;
+  margin: 0 auto;
+  box-shadow: 4px 4px 0 #5a3e0a, inset 0 0 0 1px rgba(255,220,100,0.4);
+}
+
+.panel-title {
+  background: linear-gradient(90deg, #6b3a0a 0%, #9b5a1a 40%, #6b3a0a 100%);
+  color: #ffd700;
+  font-size: 15px;
+  font-weight: 700;
+  padding: 6px 14px;
+  letter-spacing: 1px;
+  text-shadow: 1px 1px 2px #000;
+  border-bottom: 2px solid #8B6914;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.panel-title span { color: #ffa040; }
+
+.search-bar {
+  padding: 8px 10px;
+  background: rgba(255,240,180,0.6);
+  border-bottom: 2px solid #c8961a;
+  display: flex;
+  gap: 6px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+.search-bar input {
+  background: #fff8e8;
+  border: 2px solid #a0700a;
+  border-radius: 3px;
+  padding: 3px 8px;
+  font-size: 12px;
+  font-family: inherit;
+  color: #3a2000;
+  flex: 1;
+  min-width: 100px;
+  outline: none;
+}
+.ms-btn {
+  background: linear-gradient(180deg, #f0c840 0%, #c89010 100%);
+  border: 2px solid #8B6914;
+  border-radius: 3px;
+  color: #3a2000;
+  font-size: 12px;
+  font-weight: 700;
+  padding: 3px 10px;
+  cursor: pointer;
+  font-family: inherit;
+  text-shadow: 0 1px 0 rgba(255,255,255,0.4);
+  white-space: nowrap;
+}
+.ms-btn:hover { background: linear-gradient(180deg, #ffd850 0%, #e0a820 100%); }
+
+.filter-row {
+  padding: 6px 10px;
+  background: rgba(255,235,160,0.5);
+  border-bottom: 2px solid #c8961a;
+  display: flex;
+  gap: 5px;
+  flex-wrap: wrap;
+}
+.tab-btn {
+  background: linear-gradient(180deg, #d4a840 0%, #a07010 100%);
+  border: 2px solid #8B6914;
+  border-radius: 3px;
+  color: #fff8d0;
+  font-size: 11px;
+  font-weight: 700;
+  padding: 3px 8px;
+  cursor: pointer;
+  font-family: inherit;
+  text-shadow: 1px 1px 1px #000;
+}
+.tab-btn.active {
+  background: linear-gradient(180deg, #ff8c00 0%, #cc5500 100%);
+  border-color: #ff4400;
+  color: #fff;
+}
+.tab-btn:hover:not(.active) { background: linear-gradient(180deg, #e8b840 0%, #b08020 100%); }
+
+.monster-list {
+  padding: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  max-height: 500px;
+  overflow-y: auto;
+}
+.monster-list::-webkit-scrollbar { width: 8px; }
+.monster-list::-webkit-scrollbar-track { background: rgba(180,130,40,0.3); }
+.monster-list::-webkit-scrollbar-thumb { background: #8B6914; border-radius: 2px; }
+
+.monster-card {
+  background: rgba(255,248,210,0.9);
+  border: 2px solid #b8921a;
+  border-radius: 3px;
+  padding: 8px 10px;
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+  box-shadow: 2px 2px 0 rgba(139,105,20,0.3);
+  cursor: pointer;
+  transition: background 0.1s;
+}
+.monster-card:hover { background: rgba(255,235,160,0.95); }
+
+.monster-sprite {
+  width: 52px;
+  height: 52px;
+  border: 2px solid #a07810;
+  border-radius: 3px;
+  background: rgba(200,240,200,0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  font-size: 30px;
+}
+
+.monster-info { flex: 1; min-width: 0; }
+.monster-name {
+  font-size: 14px;
+  font-weight: 700;
+  color: #3a0000;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.lv-badge {
+  background: linear-gradient(180deg, #e84040 0%, #a00000 100%);
+  border: 1px solid #700000;
+  border-radius: 3px;
+  color: #fff;
+  font-size: 10px;
+  font-weight: 700;
+  padding: 1px 5px;
+  text-shadow: 1px 1px 0 #000;
+}
+.resist-tags { display: flex; gap: 3px; flex-wrap: wrap; margin: 4px 0; }
+.rtag {
+  font-size: 10px;
+  font-weight: 700;
+  border: 1.5px solid;
+  border-radius: 2px;
+  padding: 0 4px;
+  line-height: 16px;
+}
+.rtag.walk   { background:#d0f0e0; color:#007030; border-color:#009040; }
+.rtag.ice    { background:#c0e8ff; color:#003880; border-color:#0060c0; }
+.rtag.stun   { background:#e0d0ff; color:#400080; border-color:#6020b0; }
+.rtag.thunder{ background:#fff0a0; color:#805000; border-color:#c08000; }
+.rtag.fire   { background:#ffd0b0; color:#801000; border-color:#d04000; }
+.rtag.lit    { background:#d0ffd0; color:#006000; border-color:#00a000; }
+.rtag.holy   { background:#fff8c0; color:#806000; border-color:#c0a000; }
+.rtag.dark   { background:#3a2060; color:#e0d0ff; border-color:#7050a0; }
+.rtag.seal   { background:#f0c0e0; color:#600040; border-color:#a06080; }
+
+.monster-stats {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 2px 6px;
+  margin-top: 4px;
+}
+.stat-item { font-size: 11px; color: #5a3800; display: flex; gap: 3px; }
+.stat-label { color: #907040; }
+.stat-val { font-weight: 700; color: #3a1000; }
+.stat-divider { border-top: 1px dashed #c8961a; margin: 4px 0; }
+.drop-label { font-size: 10px; color: #604020; display: flex; align-items: center; gap: 3px; flex-wrap: wrap; }
+.drop-coin { color: #c08000; font-weight: 700; }
+.drop-exp  { color: #0060a0; font-weight: 700; }
+
+.ground-strip {
+  position: absolute;
+  bottom: 0; left: 0; right: 0;
+  height: 15%;
+  background: linear-gradient(180deg, #6d9e2e 0%, #8B6914 20%, #795548 100%);
+  border-top: 3px solid #558820;
+}
+</style>
+</head>
+<body>
+<div class="ms-wrap">
+  <div class="ground-strip"></div>
+
+  <div class="panel">
+    <div class="panel-title">
+      <span>👾</span> 怪物 / <span>#怪物等級1~20</span>
+    </div>
+    <div class="search-bar">
+      <input type="text" id="search-input" placeholder="搜尋關鍵字" oninput="filterMonsters()"/>
+      <button class="ms-btn" onclick="filterMonsters()">🔍 搜尋</button>
+    </div>
+    <div class="filter-row">
+      <button class="tab-btn" onclick="filterTab('other')">其他怪物</button>
+      <button class="tab-btn" onclick="filterTab('boss')">Boss 王級怪物</button>
+      <button class="tab-btn active" id="tab-1-20" onclick="filterTab('1-20')">等級 1~20</button>
+      <button class="tab-btn" onclick="filterTab('21-40')">等級 21~40</button>
+      <button class="tab-btn" onclick="filterTab('41-60')">等級 41~60</button>
+      <button class="tab-btn" onclick="filterTab('61-80')">等級 61~80</button>
+    </div>
+    <div class="monster-list" id="monster-list"></div>
+  </div>
+</div>
+
+<script>
+const monsters = [
+  { name:"嫩寶", alias:"蝸牛", lv:1, emoji:"🐌", hp:8, mp:0, mesos:"4~6", exp:3, patk:22, matk:"-", pdef:"-", mdef:"-", acc:20, eva:"-", spd:-65, knock:"-", resist:["walk","ice","stun","thunder","fire","lit","holy","dark","seal"] },
+  { name:"藍寶", alias:"藍蝸牛", lv:2, emoji:"🐌", hp:15, mp:15, mesos:"8~12", exp:4, patk:27, matk:"-", pdef:"-", mdef:"-", acc:20, eva:"-", spd:-50, knock:"-", resist:["walk","ice","stun","thunder","fire","lit","holy","dark","seal"] },
+  { name:"菇菇仔", alias:"橘菇", lv:2, emoji:"🍄", hp:20, mp:15, mesos:"8~12", exp:5, patk:32, matk:"-", pdef:"-", mdef:"-", acc:30, eva:"-", spd:-30, knock:"-", resist:["walk","ice","stun","thunder","fire","lit","holy","dark","seal"] },
+  { name:"紅寶", alias:"紅蝸牛", lv:4, emoji:"🐌", hp:40, mp:30, mesos:"12~18", exp:8, patk:35, matk:"-", pdef:3, mdef:10, acc:30, eva:"-", spd:-50, knock:"-", resist:["walk","ice","stun","thunder","fire","lit","holy","dark","seal"] },
+  { name:"橘菇", alias:"毒菇", lv:5, emoji:"🍄", hp:60, mp:30, mesos:"15~25", exp:12, patk:42, matk:"-", pdef:5, mdef:5, acc:35, eva:"-", spd:-20, knock:"-", resist:["walk","ice","stun","thunder","fire","lit","holy","dark","seal"] },
+  { name:"史萊姆", alias:"Slime", lv:6, emoji:"🫧", hp:80, mp:50, mesos:"18~30", exp:16, patk:48, matk:5, pdef:10, mdef:10, acc:40, eva:"5", spd:-15, knock:"-", resist:["walk","ice","stun","thunder","fire","lit","holy","dark","seal"] },
+  { name:"豬豬", alias:"野豬", lv:10, emoji:"🐷", hp:160, mp:0, mesos:"25~40", exp:30, patk:70, matk:"-", pdef:20, mdef:10, acc:50, eva:"-", spd:10, knock:"-", resist:["walk","ice","stun","thunder","fire","lit","holy","dark","seal"] },
+  { name:"橡果鼠", alias:"松鼠", lv:12, emoji:"🐿️", hp:220, mp:100, mesos:"30~50", exp:42, patk:82, matk:10, pdef:25, mdef:20, acc:58, eva:"8", spd:20, knock:"-", resist:["walk","ice","stun","thunder","fire","lit","holy","dark","seal"] },
+  { name:"小飛蟲", alias:"蜜蜂", lv:15, emoji:"🐝", hp:300, mp:80, mesos:"35~60", exp:60, patk:95, matk:"-", pdef:30, mdef:15, acc:65, eva:"12", spd:30, knock:"-", resist:["walk","ice","stun","thunder","fire","lit","holy","dark","seal"] },
+  { name:"石頭人", alias:"岩石精靈", lv:18, emoji:"🪨", hp:520, mp:150, mesos:"45~80", exp:90, patk:115, matk:20, pdef:50, mdef:40, acc:75, eva:"-", spd:-25, knock:"-", resist:["walk","ice","stun","thunder","fire","lit","holy","dark","seal"] },
+];
+const resistLabel = { walk:"走", ice:"冰", stun:"庫", thunder:"雷", fire:"火", lit:"畫", holy:"聖", dark:"暗", seal:"封" };
+
+function filterMonsters() {
+  const txt = document.getElementById("search-input").value.toLowerCase();
+  const filtered = txt ? monsters.filter(m => m.name.toLowerCase().includes(txt) || m.alias.toLowerCase().includes(txt)) : monsters;
+  const list = document.getElementById("monster-list");
+  if (!filtered.length) { list.innerHTML = `<div style="text-align:center;padding:24px;color:#907040;font-size:13px;">沒有找到符合的怪物</div>`; return; }
+  list.innerHTML = filtered.map(m => `
+    <div class="monster-card">
+      <div class="monster-sprite">${m.emoji}</div>
+      <div class="monster-info">
+        <div class="monster-name">${m.name}<span class="lv-badge">Lv ${m.lv}</span><span style="font-size:11px;color:#907040;font-weight:400;">別名：${m.alias}</span></div>
+        <div class="resist-tags">${m.resist.map(r=>`<span class="rtag ${r}">${resistLabel[r]}</span>`).join("")}</div>
+        <div class="drop-label">HP：<b>${m.hp}</b>&nbsp;MP：<b>${m.mp}</b>&nbsp;<span class="drop-coin">💰 ${m.mesos}</span>&nbsp;<span class="drop-exp">✨ 經驗值：${m.exp}</span></div>
+        <div class="stat-divider"></div>
+        <div class="monster-stats">
+          <div class="stat-item"><span class="stat-label">物攻</span><span class="stat-val">${m.patk}</span></div>
+          <div class="stat-item"><span class="stat-label">魔攻</span><span class="stat-val">${m.matk}</span></div>
+          <div class="stat-item"><span class="stat-label">物防</span><span class="stat-val">${m.pdef}</span></div>
+          <div class="stat-item"><span class="stat-label">魔防</span><span class="stat-val">${m.mdef}</span></div>
+          <div class="stat-item"><span class="stat-label">命中</span><span class="stat-val">${m.acc}</span></div>
+          <div class="stat-item"><span class="stat-label">迴避</span><span class="stat-val">${m.eva}</span></div>
+          <div class="stat-item"><span class="stat-label">移速</span><span class="stat-val">${m.spd}</span></div>
+          <div class="stat-item"><span class="stat-label">擊退</span><span class="stat-val">${m.knock}</span></div>
+        </div>
+      </div>
+    </div>`).join("");
+}
+filterMonsters();
+</script>
+</body>
+</html>
