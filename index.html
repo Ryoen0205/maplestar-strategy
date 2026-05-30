@@ -189,14 +189,14 @@ body { font-family: 'Noto Sans TC', sans-serif; }
 const IMAGE_BASE = ""; // 📁 圖片資料夾前綴，可依需求修改
 
 const M = [
-  { name:"嫩寶",   ,     lv:1,  img:"Snail.webp",        hp:8,   mp:0,   g:"4~6",   xp:3,  pa:22,  ma:"-", pd:"-", md:"-",  ac:20, ev:"-", sp:-65, kn:"-", r:["walk","ice","stun","thunder","fire","lit","holy","dark","seal"] },
-  { name:"藍寶",   ,     lv:2,  img:"BlueSnail.webp",   hp:15,  mp:15,  g:"8~12",  xp:4,  pa:27,  ma:"-", pd:"-", md:"-",  ac:20, ev:"-", sp:-50, kn:"-", r:["walk","ice","stun","thunder","fire","lit","holy","dark","seal"] },
-  { name:"菇菇仔", ,     lv:2,  img:"Spore.webp",     hp:20,  mp:15,  g:"8~12",  xp:5,  pa:32,  ma:"-", pd:"-", md:"-",  ac:30, ev:"-", sp:-30, kn:"-", r:["walk","ice","stun","thunder","fire","lit","holy","dark","seal"] },
-  { name:"紅寶",   ,     lv:4,  img:"RedSnail.webp",    hp:40,  mp:30,  g:"12~18", xp:8,  pa:35,  ma:"-", pd:3,   md:10,   ac:30, ev:"-", sp:-50, kn:"-", r:["walk","ice","stun","thunder","fire","lit","holy","dark","seal"] },
-  { name:"菇菇寶貝",   , lv:5,  img:"OrangeMushroom.webp",  hp:60,  mp:30,  g:"15~25", xp:12, pa:42,  ma:"-", pd:5,   md:5,    ac:35, ev:"-", sp:-20, kn:"-", r:["walk","ice","stun","thunder","fire","lit","holy","dark","seal"] },
-  { name:"綠水靈", ,     lv:6,  img:"slime.png",        hp:80,  mp:50,  g:"18~30", xp:16, pa:48,  ma:5,   pd:10,  md:10,   ac:40, ev:"5", sp:-15, kn:"-", r:["walk","ice","stun","thunder","fire","lit","holy","dark","seal"] },
-  { name:"肥肥",   ,     lv:10, img:"pig.png",          hp:160, mp:0,   g:"25~40", xp:30, pa:70,  ma:"-", pd:20,  md:10,   ac:50, ev:"-", sp:10,  kn:"-", r:["walk","ice","stun","thunder","fire","lit","holy","dark","seal"] },
-  { name:"石頭人", ,     lv:18, img:"stone_golem.png",  hp:520, mp:150, g:"45~80", xp:90, pa:115, ma:20,  pd:50,  md:40,   ac:75, ev:"-", sp:-25, kn:"-", r:["walk","ice","stun","thunder","fire","lit","holy","dark","seal"] },
+  { name:"嫩寶",        lv:1,  img:"Snail.webp",        hp:8,   mp:0,   g:"4~6",   xp:3,  pa:22,  ma:"-", pd:"-", md:"-",  ac:20, ev:"-", sp:-65, kn:"-", r:["walk","ice","stun","thunder","fire","lit","holy","dark","seal"] },
+  { name:"藍寶",        lv:2,  img:"BlueSnail.webp",   hp:15,  mp:15,  g:"8~12",  xp:4,  pa:27,  ma:"-", pd:"-", md:"-",  ac:20, ev:"-", sp:-50, kn:"-", r:["walk","ice","stun","thunder","fire","lit","holy","dark","seal"] },
+  { name:"菇菇仔",      lv:2,  img:"Spore.webp",     hp:20,  mp:15,  g:"8~12",  xp:5,  pa:32,  ma:"-", pd:"-", md:"-",  ac:30, ev:"-", sp:-30, kn:"-", r:["walk","ice","stun","thunder","fire","lit","holy","dark","seal"] },
+  { name:"紅寶",        lv:4,  img:"RedSnail.webp",    hp:40,  mp:30,  g:"12~18", xp:8,  pa:35,  ma:"-", pd:3,   md:10,   ac:30, ev:"-", sp:-50, kn:"-", r:["walk","ice","stun","thunder","fire","lit","holy","dark","seal"] },
+  { name:"菇菇寶貝",    lv:5,  img:"OrangeMushroom.webp",  hp:60,  mp:30,  g:"15~25", xp:12, pa:42,  ma:"-", pd:5,   md:5,    ac:35, ev:"-", sp:-20, kn:"-", r:["walk","ice","stun","thunder","fire","lit","holy","dark","seal"] },
+  { name:"綠水靈",      lv:6,  img:"slime.png",        hp:80,  mp:50,  g:"18~30", xp:16, pa:48,  ma:5,   pd:10,  md:10,   ac:40, ev:"5", sp:-15, kn:"-", r:["walk","ice","stun","thunder","fire","lit","holy","dark","seal"] },
+  { name:"肥肥",        lv:10, img:"pig.png",          hp:160, mp:0,   g:"25~40", xp:30, pa:70,  ma:"-", pd:20,  md:10,   ac:50, ev:"-", sp:10,  kn:"-", r:["walk","ice","stun","thunder","fire","lit","holy","dark","seal"] },
+  { name:"石頭人",      lv:18, img:"stone_golem.png",  hp:520, mp:150, g:"45~80", xp:90, pa:115, ma:20,  pd:50,  md:40,   ac:75, ev:"-", sp:-25, kn:"-", r:["walk","ice","stun","thunder","fire","lit","holy","dark","seal"] },
 ];
 
 const RL = { walk:"走", ice:"冰", stun:"庫", thunder:"雷", fire:"火", lit:"畫", holy:"聖", dark:"暗", seal:"封" };
@@ -211,7 +211,7 @@ function imgTag(m) {
 
 function f() {
   const t = document.getElementById("si").value.toLowerCase();
-  const d = t ? M.filter(m => m.name.includes(t) || m.alias.toLowerCase().includes(t)) : M;
+  const d = t ? M.filter(m => m.name.includes(t)) : M;
   document.getElementById("ml").innerHTML = d.map(m => \`
     <div class="monster-card">
       <div class="monster-sprite">\${imgTag(m)}</div>
